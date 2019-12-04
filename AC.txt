@@ -1,0 +1,20 @@
+top nav bar
+one big board with square / or almost square car panels
+
+every car
+data - plate nr, make, model, year, fuel, v, owner, oc owner 
+(coowners possible)
+oc check
+ac ckeck
+service
+oil - once a year, once 10000km
+oil filter
+air filter - date
+cabin filter - date, once a year
+
+nav bar
+add new card 
+save btn
+user profile
+logout
+

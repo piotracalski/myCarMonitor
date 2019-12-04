@@ -1,0 +1,308 @@
+[
+    {
+        "id": 0,
+        "info": [
+            {
+                "panelData": [
+                    {
+                        "name": "make",
+                        "title": "make",
+                        "value": "Toyota"
+                    },
+                    {
+                        "name": "model",
+                        "title": "model",
+                        "value": "Corolla Verso"
+                    },
+                    {
+                        "name": "productionYear",
+                        "title": "production year",
+                        "value": "2003"
+                    },
+                    {
+                        "name": "fuel",
+                        "title": "fuel",
+                        "value": "diesel"
+                    },
+                    {
+                        "lastUpdate": "2019-09-08",
+                        "name": "mileAge",
+                        "status": "ok",
+                        "title": "mileage",
+                        "value": "268248"
+                    },
+                    {
+                        "name": "engineDisplacement",
+                        "title": "engine displacement",
+                        "value": "2000"
+                    },
+                    {
+                        "name": "owner",
+                        "title": "owner",
+                        "value": "Piotr Acalski"
+                    },
+                    {
+                        "name": "co-owner",
+                        "title": "co-owner",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "plates",
+                        "title": "plates",
+                        "value": "CB 3929d"
+                    },
+                    {
+                        "name": "policyCompany",
+                        "title": "policy company",
+                        "value": "PZU"
+                    },
+                    {
+                        "name": "policyExpires",
+                        "status": "ok",
+                        "title": "policy expires",
+                        "value": "2020-08-28"
+                    }
+                ],
+                "panelTitle": "General info"
+            },
+            {
+                "panelData": [
+                    {
+                        "name": "nextTechnicalCheck",
+                        "status": "ok",
+                        "title": "next technical check",
+                        "value": "2019-10-21"
+                    },
+                    {
+                        "name": "motorOil",
+                        "status": "ok",
+                        "title": "motor oil",
+                        "value": "2019-08-12"
+                    },
+                    {
+                        "name": "motorOilMlieage",
+                        "status": "alert",
+                        "title": "motor oil (mileage)",
+                        "value": "239248"
+                    },
+                    {
+                        "name": "oilFilter",
+                        "status": "ok",
+                        "title": "oil filter",
+                        "value": "2019-08-12"
+                    },
+                    {
+                        "name": "airFilter",
+                        "status": "ok",
+                        "title": "air filter",
+                        "value": "2019-08-12"
+                    },
+                    {
+                        "name": "cabinFilter",
+                        "status": "ok",
+                        "title": "cabin filter",
+                        "value": "2019-08-12"
+                    },
+                    {
+                        "name": "timingBelt",
+                        "status": "alert",
+                        "title": "timing belt",
+                        "value": "239248"
+                    },
+                    {
+                        "name": "tensioner",
+                        "status": "warning",
+                        "title": "tensioner",
+                        "value": "254248"
+                    },
+                    {
+                        "name": "waterPump",
+                        "status": "ok",
+                        "title": "water pump",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "rollers",
+                        "status": "alert",
+                        "title": "rollers",
+                        "value": "239248"
+                    },
+                    {
+                        "name": "brakePads",
+                        "status": "alert",
+                        "title": "brake pads",
+                        "value": "239248"
+                    },
+                    {
+                        "name": "brakeDiscs",
+                        "status": "alert",
+                        "title": "brake discs",
+                        "value": "239248"
+                    },
+                    {
+                        "name": "brakeFluid",
+                        "status": "ok",
+                        "title": "brake fluid",
+                        "value": "n/a"
+                    }
+                ],
+                "panelTitle": "Technical info"
+            }
+        ],
+        "photo": "car-stock.png",
+        "status": "alert"
+    },
+    {
+        "id": 1,
+        "photo": "car-stock.png",
+        "info": [
+            {
+                "panelTitle": "General info",
+                "panelData": [
+                    {
+                        "name": "make",
+                        "title": "make",
+                        "value": "test"
+                    },
+                    {
+                        "name": "model",
+                        "title": "model",
+                        "value": "model"
+                    },
+                    {
+                        "name": "productionYear",
+                        "title": "production year",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "fuel",
+                        "title": "fuel",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "mileAge",
+                        "title": "mileage",
+                        "value": "n/a",
+                        "lastUpdate": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "engineDisplacement",
+                        "title": "engine displacement",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "owner",
+                        "title": "owner",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "co-owner",
+                        "title": "co-owner",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "plates",
+                        "title": "plates",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "policyCompany",
+                        "title": "policy company",
+                        "value": "n/a"
+                    },
+                    {
+                        "name": "policyExpires",
+                        "title": "policy expires",
+                        "value": "n/a",
+                        "status": "unknown"
+                    }
+                ]
+            },
+            {
+                "panelTitle": "Technical info",
+                "panelData": [
+                    {
+                        "name": "nextTechnicalCheck",
+                        "title": "next technical check",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "motorOil",
+                        "title": "motor oil",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "motorOilMlieage",
+                        "title": "motor oil (mileage)",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "oilFilter",
+                        "title": "oil filter",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "airFilter",
+                        "title": "air filter",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "cabinFilter",
+                        "title": "cabin filter",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "timingBelt",
+                        "title": "timing belt",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "tensioner",
+                        "title": "tensioner",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "waterPump",
+                        "title": "water pump",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "rollers",
+                        "title": "rollers",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "brakePads",
+                        "title": "brake pads",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "brakeDiscs",
+                        "title": "brake discs",
+                        "value": "n/a",
+                        "status": "unknown"
+                    },
+                    {
+                        "name": "brakeFluid",
+                        "title": "brake fluid",
+                        "value": "n/a",
+                        "status": "unknown"
+                    }
+                ]
+            }
+        ],
+        "status": "unknown"
+    }
+]
