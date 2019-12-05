@@ -10,6 +10,7 @@ v.1.0.0 TODO's:
 - photo change
 - UX improvment
 - delete car icon change
+- stock car img bug
 
 ## Project setup
 ```
