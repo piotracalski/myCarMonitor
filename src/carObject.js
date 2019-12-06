@@ -3,7 +3,7 @@ const Car = class {
     constructor(newCarId, carCode) {
       this.id = newCarId;
       this.carCode = carCode;
-      this.photo = undefined
+      this.photo = undefined;
       this.info = [
         {
           panelTitle: 'General info',

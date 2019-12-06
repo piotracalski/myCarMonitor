@@ -22,7 +22,13 @@ import fs from 'fs'
 import {
   setCarCode, 
   uploadCarPhoto, 
-  deleteCarPhoto
+  deleteCarPhoto,
+  getCarCodes,
+  deleteUnusedPhotos,
+  updateAllPhotos,
+  getAllPhotos,
+  saveData,
+  saveAllPhotos
   } from './helpers.js'
 
 export default {
@@ -40,6 +46,7 @@ export default {
       user: 'piotracalski',
       activeCar: [],
       cars: [],
+      photosToSave: [],
       features: {
         make: {name: 'make', toBeVerified: false, infoPanel: 0, position: 0},
         model: {name: 'model', toBeVerified: false, infoPanel: 0, position: 1},
@@ -108,24 +115,30 @@ export default {
           
           case 'addNewCard':
             
-            this.showNewCarDialog();
+            if(this.photosToSave.length < 2) {
+
+              this.showNewCarDialog();
+            } else {
+              alert('Please, save previous changes before adding new car.');
+            }
             break
           
           case 'saveData':
+            saveData(this.user, this.cars);
   
-            db.collection("users").doc('piotracalski').set({
-              cars: JSON.parse(JSON.stringify(this.cars))
-            });
             // TODO - need to add loader
+            // TODO - nedd to add succes / fail info
             break
           
           case 'userProfile':  
             console.log('TODO');
+            const carCodes = getCarCodes(this.cars);
+            deleteUnusedPhotos(carCodes, this.user);
             break
           
           case 'logout': 
             console.log('TODO');
-            // this.getCarsData();
+            this.getCarsData();
             break
             
           default:
@@ -247,6 +260,16 @@ export default {
 
           // delete photo
           deleteCarPhoto(this.user, delCarCode);
+            // .then(() => {
+            // getAllPhotos(this.user).then(photos => {
+            //   const updatedPhotos = updateAllPhotos(photos, 'remove', delCarCode);
+            //   saveAllPhotos(this.user, updatedPhotos);
+            // });
+            // });
+
+          // save changes
+          // user should be pre-informed about this action in delete confirmation box - TODO
+          saveData(this.user, this.cars);
           break
             
         case 'content-hideContent':
@@ -273,18 +296,17 @@ export default {
     },
     loadData: async function() {
       
-      let docRef = db.collection("users").doc("piotracalski");
+      let docRef = db.collection("piotracalski").doc("cars");
 
-      let cars = [];
+      let carsDb = [];
 
       let loadedData = new Promise(resolve => {
 
         docRef.get().then(function(doc) {
 
             if (doc.exists) {
-              // console.log(doc.data())
-              cars = doc.data();
-              resolve(cars)
+              carsDb = doc.data().cars;
+              resolve(carsDb)
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -295,7 +317,7 @@ export default {
       });
 
       let database = await loadedData;
-      this.cars = await database.cars
+      this.cars = await database;
       this.toggleLoader();
 
       return database
@@ -340,7 +362,7 @@ export default {
 
       // validate that carMake and carModel are not empty
       // if not add new car object
-      if (formData[0] !== '' && formData[1] !== '') {
+      // if (formData[0] !== '' && formData[1] !== '') {
 
         if(carPhoto) {
 
@@ -367,9 +389,14 @@ export default {
       
               this.$refs.board.$refs.card[newCarId].$refs.cardStatus.updateStatus('unknown');
             },100);
+          }).then(() => {
+            saveData(this.user, this.cars);
+            // getAllPhotos(this.user).then(photos => {
+            //   const updatedPhotos = updateAllPhotos(photos, 'add', carCode);
+            //   saveAllPhotos(this.user, updatedPhotos);
+            // });
           });
         }
-      }
     },
     adjustCarId: function(carId) {
       let currentCarId = this.cars[carId - 1].id;
