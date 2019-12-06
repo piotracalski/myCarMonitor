@@ -3,7 +3,7 @@
 Current version is 0.6.0 <br>
 v.1.0.0 TODO's:
 - login / logout
-- photo saving issue
+- photo saving issue - DONE
 - user control panel
 - save suggest after any edit action
 - delete car confirmation box
