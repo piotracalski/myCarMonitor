@@ -28,7 +28,8 @@ import {
   updateAllPhotos,
   getAllPhotos,
   saveData,
-  saveAllPhotos
+  saveAllPhotos,
+  toggleSaveSuggest
   } from './helpers.js'
 
 export default {
@@ -46,7 +47,6 @@ export default {
       user: 'piotracalski',
       activeCar: [],
       cars: [],
-      photosToSave: [],
       features: {
         make: {name: 'make', toBeVerified: false, infoPanel: 0, position: 0},
         model: {name: 'model', toBeVerified: false, infoPanel: 0, position: 1},
@@ -115,12 +115,7 @@ export default {
           
           case 'addNewCard':
             
-            if(this.photosToSave.length < 2) {
-
-              this.showNewCarDialog();
-            } else {
-              alert('Please, save previous changes before adding new car.');
-            }
+            this.showNewCarDialog();
             break
           
           case 'saveData':
@@ -167,9 +162,9 @@ export default {
 
           // get new note obj
           let newNote = this.$refs.contentBox.$refs.editNote.getNewValue();
-          console.log(newNote)
+          // console.log(newNote)
           
-          console.log(this.features[newNote.name])
+          // console.log(this.features[newNote.name])
           // get feature and change its value
           this.cars[this.activeCar].info[this.features[newNote.name].infoPanel].panelData[this.features[newNote.name].position].value = newNote.value;
 
@@ -215,6 +210,7 @@ export default {
             // check car status
             this.setCarStatus(this.activeCar);
           }
+          toggleSaveSuggest('on');
 
           break
     

@@ -40,5 +40,9 @@ export default {
         width: 100%;
         position: relative;
         top: 0px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        /* border: rgb(100, 99, 99) solid 1px;
+        border-bottom: none; */
     }
 </style>

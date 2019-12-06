@@ -8,6 +8,11 @@ const storageVariables = {
     mainFolder: 'CarPhoto'
 };
 
+const selectors = {
+    saveBtn: 'button-saveData',
+    saveSuggest: 'saveSuggest'
+}
+
 // GENERAL FUNCTIONS
     // setCarCode
     // getCarCodes
@@ -147,6 +152,7 @@ export const saveData = (user, carsDb) => {
     db.collection(user).doc(dbVariables.cars).set({
         cars: JSON.parse(JSON.stringify(carsDb))
     });
+    toggleSaveSuggest('off');
 };
 
 export const saveAllPhotos = (user, photosDb) => {
@@ -159,12 +165,13 @@ export const saveAllPhotos = (user, photosDb) => {
     }
 };
 
-
-
-
-      
-
-
-
-
-
+export const toggleSaveSuggest = mode => {
+    const saveBtn = document.getElementById(selectors.saveBtn);
+    if (mode === 'on') {
+        if (!Array.from(saveBtn.classList).includes(selectors.saveSuggest)) {
+            saveBtn.classList.add(selectors.saveSuggest);
+        }
+    } else if (mode === 'off') {
+        saveBtn.classList.remove(selectors.saveSuggest);
+    }
+}

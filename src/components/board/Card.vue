@@ -27,6 +27,9 @@ export default {
         display: block;
         box-shadow: 0px 0px 10px 1px #000;
         transition: transform 0.5s;
+        border: rgb(85, 83, 85) solid 1px;
+        border-radius: 5px;
+        overflow: hidden;
     }
     .card:hover {
         transform: scale(1.05);
