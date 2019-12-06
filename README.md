@@ -1,6 +1,6 @@
 # mycarmonitor
 
-Current version is 0.6.2 <br>
+Current version is 0.6.3 <br>
 v.1.0.0 TODO's:
 - login / logout
 - photo saving issue - DONE
@@ -9,7 +9,7 @@ v.1.0.0 TODO's:
 - delete car confirmation box
 - photo, car make /model edit
 - UX improvment
-- delete car icon change
+- delete car icon change - DONE
 - stock car img bug
 
 ## Project setup
