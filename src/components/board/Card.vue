@@ -1,7 +1,7 @@
 <template>
     <div class="card" :id="'card-'+car.id" @click="$emit('showCar', car.id)">
         <CardStatus ref="cardStatus" :status="car.status" :id="car.id"/>
-        <CarInfo :car="car" :user="user"/>
+        <CarInfo ref="carInfo" :car="car" :user="user"/>
     </div>
 </template>
 
@@ -15,7 +15,12 @@ export default {
         CardStatus,
         CarInfo
     },
-    props: ['car', 'user']
+    props: ['car', 'user'],
+    methods: {
+        getCar: function () {
+            return this.car;
+        }
+    }
 }
 </script>
 
