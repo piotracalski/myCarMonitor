@@ -5,6 +5,7 @@
         </div>
         <ContentOverlay ref="contentOverlay"/>
         <EditNote ref="editNote" v-on:btnClick="emitButtonClick" :activeCar="activeCar" />
+        <DeleteConfirmation ref="delConf" v-on:btnClick="emitButtonClick" :car="cars[activeCar]"/>
     </div>
 </template>
 
@@ -12,13 +13,15 @@
 import CarDetails from './content/CarDetails.vue'
 import ContentOverlay from './content/ContentOverlay.vue'
 import EditNote from './content/editNote/EditNote.vue'
+import DeleteConfirmation from './content/delConf/DelConf.vue'
 
 export default {
     name: 'Content',
     components: {
         CarDetails,
         ContentOverlay,
-        EditNote
+        EditNote,
+        DeleteConfirmation
     },
     props: ['cars','activeCar','pageObject','user'],
     mounted() {
@@ -33,7 +36,22 @@ export default {
             document.querySelector('#content').classList.remove('active');
         },
         emitButtonClick: function(btn) {
-            this.$emit('btnClick',`content-${btn}`);
+            switch (btn) {
+                case 'deleteCar':
+                    this.deleteCar();
+                    break
+                case 'dc-delCar-cancel':
+                    this.$refs.contentOverlay.turnOff();
+                    this.$refs.delConf.hide();
+                    break
+                case 'dc-delCar-confirm':
+                    this.$refs.contentOverlay.turnOff();
+                    this.$refs.delConf.hide();
+                    this.$emit('btnClick',`content-${btn}`);
+                    break
+                default:
+                    this.$emit('btnClick',`content-${btn}`);
+            }
         },
         editNote: function(note) {
             // console.log(note);
@@ -43,6 +61,14 @@ export default {
 
             // show edit note dialog box
             this.$refs.editNote.show(note);
+        },
+        deleteCar: function() {
+
+            // turn on content overlay
+            this.$refs.contentOverlay.turnOn();
+
+            // show confirmation box
+            this.$refs.delConf.show();
         }
     }
 }

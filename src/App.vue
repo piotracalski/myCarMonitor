@@ -23,6 +23,7 @@ import {
   setCarCode, 
   uploadCarPhoto, 
   deleteCarPhoto,
+  setPhoto,
   getCarCodes,
   deleteUnusedPhotos,
   updateAllPhotos,
@@ -228,10 +229,8 @@ export default {
           this.hideContent();
           break
             
-        case 'content-deleteCar':
+        case 'content-dc-delCar-confirm':
     
-          // activate delete confirmation box
-          // TODO
           let deletedCar = this.activeCar;
           let delCarCode = this.cars[deletedCar].carCode;
     
@@ -254,17 +253,19 @@ export default {
             this.setCarStatus(car.id);
           });
 
+          // reload photos (only cards >= deleted car)
+          this.$refs.board.$refs.card.forEach(card => {
+            let car = card.getCar();
+            if (car.id >= deletedCar && car.carCode !== delCarCode) {
+
+              setPhoto(this.user, car, `#carInfoImg-${car.id}`);
+            }
+          });
+
           // delete photo
           deleteCarPhoto(this.user, delCarCode);
-            // .then(() => {
-            // getAllPhotos(this.user).then(photos => {
-            //   const updatedPhotos = updateAllPhotos(photos, 'remove', delCarCode);
-            //   saveAllPhotos(this.user, updatedPhotos);
-            // });
-            // });
 
           // save changes
-          // user should be pre-informed about this action in delete confirmation box - TODO
           saveData(this.user, this.cars);
           break
             
