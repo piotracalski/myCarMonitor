@@ -1,6 +1,6 @@
 <template>
     <div class="carDetails">
-        <div class="bigPhoto"></div>
+        <BigPhoto />
         <div class="carData">
             <HeaderPanel :carMake="this.cars[this.activeCar].info[0].panelData[0].value" :carModel="this.cars[this.activeCar].info[0].panelData[1].value" v-on:btnClick="emitButtonClick"/>
             <div class="carDataContent">
@@ -13,20 +13,22 @@
 </template>
 
 <script>
+import BigPhoto from './BigPhoto'
 import InfoPanel from './InfoPanel.vue'
 import HeaderPanel from './HeaderPanel.vue'
-import { getCarPhoto, setPhoto } from '../../helpers.js'
+import { setPhoto } from '../../helpers.js'
 
 export default {
     name: 'CarDetails',
     components: {
         InfoPanel,
-        HeaderPanel
+        HeaderPanel,
+        BigPhoto
     },
     props: ['cars','activeCar','user'],
     created() {},
     mounted() {
-        setPhoto(this.user, this.cars[this.activeCar], '.bigPhoto');
+        setPhoto(this.user, this.cars[this.activeCar], '#bigPhoto');
     },
     methods: {
         emitButtonClick: function(btn) {
@@ -49,15 +51,6 @@ export default {
         grid-template-columns: 3fr 5fr;
         grid-template-rows: 1fr; 
         grid-gap: 1vw;
-    }
-    .bigPhoto {
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        box-shadow: 0px 0px 20px 0px #000;
-        color: #f7f7f7;
     }
     .carData {
         width: 100%;

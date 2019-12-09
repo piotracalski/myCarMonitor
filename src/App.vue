@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <Header v-on:btnClick="headerButtons"/>
     <Board ref="board" :cars="cars"  v-on:showCar="showCar" :user="user"/>
     <Content ref="contentBox" :cars="cars" :activeCar="activeCar" :pageObject="pageObject" v-on:btnClick="contentButtons" :user="user"/>
