@@ -1,11 +1,13 @@
 <template>
     <div id="content">
-        <div :key="carId" v-for="carId in activeCar">
-            <CarDetails ref="carDetails" :cars="cars" :activeCar="activeCar" v-on:btnClick="emitButtonClick" v-on:editNote="editNote" :user="user"/>
-        </div>
-        <ContentOverlay ref="contentOverlay"/>
-        <EditNote ref="editNote" v-on:btnClick="emitButtonClick" :activeCar="activeCar" />
-        <DeleteConfirmation ref="delConf" v-on:btnClick="emitButtonClick" :car="cars[activeCar]"/>
+        <CarDetails ref="carDetails" :cars="cars" :activeCar="activeCar" v-on:btnClick="emitButtonClick" v-on:editNote="showEditNote" :user="user"/>
+        <transition name="fade" mode="out-in">
+            <ContentOverlay ref="contentOverlay" v-if="overlay === true" />
+        </transition>
+        <transition name="fade" mode="out-in">
+            <EditNote ref="editNote" :note="note" v-if="popup === 'editNote'" v-on:btnClick="emitButtonClick" :activeCar="activeCar" />
+            <DeleteConfirmation ref="delConf" v-if="popup === 'deleteConfirmation'" v-on:btnClick="emitButtonClick" :car="cars[activeCar]"/>
+        </transition>
     </div>
 </template>
 
@@ -24,16 +26,21 @@ export default {
         DeleteConfirmation
     },
     props: ['cars','activeCar','pageObject','user'],
+    data() {
+        return {
+            overlay: false,
+            popup: undefined,
+            note: undefined
+        }
+    },
     mounted() {
     },
     methods: {
-        show: function(id) {
-            document.querySelector('#content').style.height = '96vh';
-            document.querySelector('#content').classList.add('active');
+        toggleOverlay: function() {
+            this.overlay = !this.overlay;
         },
-        hide: function() {
-            document.querySelector('#content').style.height = '0vh';
-            document.querySelector('#content').classList.remove('active');
+        toggleEditNote: function() {
+            this.editNote = !this.editNote;
         },
         emitButtonClick: function(btn) {
             switch (btn) {
@@ -53,14 +60,15 @@ export default {
                     this.$emit('btnClick',`content-${btn}`);
             }
         },
-        editNote: function(note) {
-            // console.log(note);
-
-            // turn on content overlay
-            this.$refs.contentOverlay.turnOn();
-
-            // show edit note dialog box
-            this.$refs.editNote.show(note);
+        showEditNote: function(note) {
+            this.toggleOverlay();
+            this.popup = 'editNote';
+            this.note = note;
+        },
+        hideEditNote: function() {
+            this.toggleOverlay();
+            this.popup = undefined;
+            this.note = undefined;
         },
         deleteCar: function() {
 
@@ -77,8 +85,8 @@ export default {
 <style scoped>
     #content {
         background-color: #312D3C;
-        width: 97vw;
-        height: 0px;
+        width: calc(100% - 2vw);
+        height: 100%;
         box-shadow: 0px 1px 10px 1px #000;
         position: fixed;
         top: 0px;

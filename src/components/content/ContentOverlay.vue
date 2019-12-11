@@ -1,7 +1,5 @@
 <template>
-  <div id="contentOverlay">
-
-  </div>
+  <div id="contentOverlay"></div>
 </template>
 
 <script>
@@ -30,6 +28,5 @@ export default {
         position: absolute;
         top:0px;
         z-index: 10;
-        visibility:hidden;
     }
 </style>

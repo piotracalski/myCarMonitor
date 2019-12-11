@@ -11,14 +11,14 @@ import EnContent from './EnContent.vue'
 
 export default {
     name: 'EditNode',
-    props: ['activeCar'],
+    props: ['activeCar','note'],
     components: {
         EnButtons,
         EnContent
     },
     data() {
         return {
-            note: undefined,
+            editedNote: undefined,
             defaultNote: {
                 name: undefined,
                 title: undefined,
@@ -29,17 +29,9 @@ export default {
         }
     },
     created() {
-        this.note = this.defaultNote;
+        this.editedNote = this.note;
     },
     methods: {
-        show: function(note) {
-            document.getElementById('EditNode-box').style.display = 'block';
-            this.note = note;
-        },
-        hide: function() {
-            document.getElementById('EditNode-box').style.display = 'none';
-            this.note = this.defaultNote;
-        },
         emitButtonClick: function(btn) {
             this.$emit('btnClick',`en-${btn}`);
         },
@@ -61,7 +53,6 @@ export default {
         background-color: #312D3C;
         position:absolute;
         z-index: 12;
-        display: none;
         margin: auto;
         left: 50vw;
         top: 50vh;

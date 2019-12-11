@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <Header v-on:btnClick="headerButtons"/>
-    <Board ref="board" :cars="cars"  v-on:showCar="showCar" :user="user"/>
-    <Content ref="contentBox" :cars="cars" :activeCar="activeCar" :pageObject="pageObject" v-on:btnClick="contentButtons" :user="user"/>
+    <transition name="fade" mode="out-in">
+      <Board ref="board" v-if="currentDisplay === 'Board'" :cars="cars"  v-on:showCar="showCar" :user="user"/>
+      <Content v-if="currentDisplay === 'CarDetails'" ref="contentBox" :cars="cars" :activeCar="activeCar" :pageObject="pageObject" v-on:btnClick="contentButtons" :user="user"/>
+    </transition>
     <BoardOverlay ref="boardOverlay"/>
     <AddNewCar ref="addNewCar"  v-on:btnClick="contentButtons"/>
     <Footer />
@@ -44,6 +46,7 @@ export default {
   },
   data() {
     return {
+      currentDisplay: 'Board',
       user: 'piotracalski',
       activeCar: [],
       cars: [],
@@ -150,11 +153,8 @@ export default {
           // clear form
           this.$refs.contentBox.$refs.editNote.$refs.EnContent.resetForm();
 
-          // hide dialog box
-          this.$refs.contentBox.$refs.editNote.hide();
-
-          // hide content overlay
-           this.$refs.contentBox.$refs.contentOverlay.turnOff();
+          // hide dialog box and overlay
+          this.$refs.contentBox.hideEditNote();
 
           break
 
@@ -269,9 +269,10 @@ export default {
           break
             
         case 'content-hideContent':
-    
-          // hide content + board overlay
-          this.hideContent();
+
+          this.currentDisplay = "Board";
+
+          this.changeActiveCar('delete');
           break
             
         case 'anc-cancel':
@@ -586,16 +587,9 @@ export default {
     },
     showCar: function(id) {
 
-      // console.log(this.cars[id].id)
+      this.currentDisplay = "CarDetails";
 
-      if(document.querySelector('#content').classList.contains('active') === false) {
-
-        this.$refs.contentBox.show(id);
-
-        this.$refs.boardOverlay.turnOn();
-
-        this.changeActiveCar('set',id);
-      }
+      this.changeActiveCar('set',id);
     },
     hideContent: function() {
       
@@ -629,5 +623,11 @@ export default {
     width: 98vw;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .3s ease;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>
