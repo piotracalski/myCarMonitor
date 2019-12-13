@@ -44,7 +44,7 @@ export default {
 <style scoped>
     .carDetails {
         width: calc(100% - 40px);
-        height: calc(96vh - 110px);
+        height: calc(100% - 110px);
         /* background-color: #f7f7f7; */
         margin: 90px 20px 20px 20px;
         display: grid;

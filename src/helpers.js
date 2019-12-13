@@ -1,17 +1,8 @@
-// GENERAL VARIABLES
-const dbVariables = {
-    photos: 'photos',
-    cars: 'cars'
-};
-
-const storageVariables = {
-    mainFolder: 'CarPhoto'
-};
-
-const selectors = {
-    saveBtn: 'button-saveData',
-    saveSuggest: 'saveSuggest'
-}
+import {
+    dbVariables,
+    storageVariables,
+    selectors
+} from './variables.js'
 
 // GENERAL FUNCTIONS
     // setCarCode

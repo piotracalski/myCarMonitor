@@ -40,6 +40,5 @@ export default {
         top: 0px;
         z-index: 8;
         opacity: 0.6;
-        visibility: hidden;
     }
 </style>

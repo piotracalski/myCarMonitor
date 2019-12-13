@@ -6,31 +6,16 @@
 </template>
 
 <script>
+import { updateStatusDisplay } from '../../display'
+
 export default {
     name: 'Note',
     props: ['note'],
     mounted() {
-        this.updateStatus(this.note.status);
+        updateStatusDisplay(`#note-${this.note.name}`, `${this.note.status}`);
+        // this.updateStatus(this.note.status);
     },
     methods: {
-        updateStatus: function(status) {
-            switch(status) {
-                case 'ok':
-                    document.querySelector(`#note-${this.note.name}`).style.color = '#f7f7f7';
-                    break;
-                case 'warning':
-                    document.querySelector(`#note-${this.note.name}`).style.color = '#F56C1A';
-                    break;
-                case 'alert':
-                    document.querySelector(`#note-${this.note.name}`).style.color = '#DF2B53';
-                    break;
-                case 'unknown':
-                    document.querySelector(`#note-${this.note.name}`).style.color = 'yellow';
-                    break
-                default:
-                    document.querySelector(`#note-${this.note.name}`).style.color = '#f7f7f7';
-            }
-        }
     }
 }
 </script>

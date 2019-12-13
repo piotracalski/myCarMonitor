@@ -1,6 +1,6 @@
 # mycarmonitor
 
-Current version is 0.6.4 <br>
+Current version is 0.7.4 <br>
 v.1.0.0 TODO's:
 - login / logout
 - photo saving issue - DONE

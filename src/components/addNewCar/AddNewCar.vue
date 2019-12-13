@@ -16,12 +16,6 @@ export default {
         AncContent
     },
     methods: {
-        show: function() {
-            document.getElementById('AddNewCar-box').style.display = 'block';
-        },
-        hide: function() {
-            document.getElementById('AddNewCar-box').style.display = 'none';
-        },
         emitButtonClick: function(btn) {
             this.$emit('btnClick',btn);
         }
@@ -38,7 +32,6 @@ export default {
         background-color: #312D3C;
         position:absolute;
         z-index: 9;
-        display: none;
         margin: auto;
         left: 50vw;
         top: 50vh;

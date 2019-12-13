@@ -22,12 +22,6 @@ export default {
     created() {
     },
     methods: {
-        show: function() {
-            document.getElementById('DeleteConfirmation-box').style.display = 'block';
-        },
-        hide: function() {
-            document.getElementById('DeleteConfirmation-box').style.display = 'none';
-        },
         emitButtonClick: function(btn) {
             this.$emit('btnClick',`dc-${btn}`);
         }
@@ -44,7 +38,6 @@ export default {
         background-color: #312D3C;
         position:absolute;
         z-index: 12;
-        display: none;
         margin: auto;
         left: 50vw;
         top: 50vh;

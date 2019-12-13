@@ -1,10 +1,26 @@
 <template>
   <div id="app">
     <Header v-on:btnClick="headerButtons"/>
-    <Board ref="board" :cars="cars"  v-on:showCar="showCar" :user="user"/>
-    <Content ref="contentBox" :cars="cars" :activeCar="activeCar" :pageObject="pageObject" v-on:btnClick="contentButtons" :user="user"/>
-    <BoardOverlay ref="boardOverlay"/>
-    <AddNewCar ref="addNewCar"  v-on:btnClick="contentButtons"/>
+    <transition name="fade" mode="out-in">
+      <Board ref="board" v-if="currentDisplay === 'Board'" :cars="cars"  v-on:showCar="showCar" :user="user"/>
+      <Content 
+        v-if="currentDisplay === 'CarDetails'" 
+        ref="contentBox" 
+        :cars="cars" 
+        :activeCar="activeCar" 
+        :pageObject="pageObject" 
+        :user="user"
+        v-on:btnClick="contentButtons" 
+        v-on:updateNote="updateNote" 
+        v-on:deleteCar="deleteCar" 
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <AddNewCar ref="addNewCar" v-if="popup === 'AddNewCar'" v-on:btnClick="contentButtons"/>
+    </transition>
+    <transition name="fade" mode="out-in">
+      <BoardOverlay ref="boardOverlay" v-if="boardOverlay === true" />
+    </transition>
     <Footer />
   </div>
 </template>
@@ -31,6 +47,9 @@ import {
   saveAllPhotos,
   toggleSaveSuggest
   } from './helpers.js'
+import {
+  toggleNavBarBtns, updateStatusDisplay
+  } from './display.js'
 
 export default {
   name: 'app',
@@ -44,6 +63,9 @@ export default {
   },
   data() {
     return {
+      currentDisplay: 'Board',
+      popup: undefined,
+      boardOverlay: false,
       user: 'piotracalski',
       activeCar: [],
       cars: [],
@@ -78,30 +100,31 @@ export default {
       }
     }
   },
-  created() {
-    // load data from database
-    this.loadData();
-
-  },
+  created() {},
   mounted() {
-    const featuresList = Object.keys(this.features);
-    // console.log(`Features: ${featuresList}`)
+    
+    this.loadData().then(() => {
+      
+      const featuresList = Object.keys(this.features);
+      // console.log(`Features: ${featuresList}`)
+  
+      if(this.cars.length > 0) {
+  
+        this.cars.forEach(car => {
+          // console.log(`car ID: ${car.id}`)
+  
+          featuresList.forEach(feature => {
+            // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
+  
+            if (this.features[feature].toBeVerified) {
+              this.checkStatus(this.features[feature],car.id);
+            }
+          });
 
-    if(this.cars.length > 0) {
-
-      this.cars.forEach(car => {
-        // console.log(`car ID: ${car.id}`)
-
-        featuresList.forEach(feature => {
-          // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
-
-          if (this.features[feature].toBeVerified) {
-
-            this.checkStatus(this.features[feature],car.id);
-          }
+          this.setCarStatus(car.id);
         });
-      });
-    }
+      }
+    });
   },
   methods: {
     headerButtons: function(btn) {
@@ -115,7 +138,9 @@ export default {
           
           case 'addNewCard':
             
-            this.showNewCarDialog();
+            this.popup = 'AddNewCar';
+            this.boardOverlay = true;
+            toggleNavBarBtns();
             break
           
           case 'saveData':
@@ -144,88 +169,13 @@ export default {
     contentButtons: function(btn) {
 
       switch (btn) {
-
-        case 'content-en-cancel':
-
-          // clear form
-          this.$refs.contentBox.$refs.editNote.$refs.EnContent.resetForm();
-
-          // hide dialog box
-          this.$refs.contentBox.$refs.editNote.hide();
-
-          // hide content overlay
-           this.$refs.contentBox.$refs.contentOverlay.turnOff();
-
-          break
-
-        case 'content-en-confirm':
-
-          // get new note obj
-          let newNote = this.$refs.contentBox.$refs.editNote.getNewValue();
-          // console.log(newNote)
-          
-          // console.log(this.features[newNote.name])
-          // get feature and change its value
-          this.cars[this.activeCar].info[this.features[newNote.name].infoPanel].panelData[this.features[newNote.name].position].value = newNote.value;
-
-          // set last modified value if feature is mileage
-          if(newNote.name === 'mileAge') {
-            this.cars[this.activeCar].info[this.features[newNote.name].infoPanel].panelData[this.features[newNote.name].position].lastUpdate = this.getCurrentDate();
-          }
-
-          // clear form
-          this.$refs.contentBox.$refs.editNote.$refs.EnContent.resetForm();
-
-          // hide edit note dialog box
-          this.$refs.contentBox.$refs.editNote.hide();
-
-          // hide content overlay
-          this.$refs.contentBox.$refs.contentOverlay.turnOff();
-
-          if(this.features[newNote.name].toBeVerified) {
-
-            // check feature status
-            this.checkStatus(this.features[newNote.name],this.activeCar);
-  
-            // note - update feature status
-            let newStatus = this.cars[this.activeCar].info[this.features[newNote.name].infoPanel].panelData[this.features[newNote.name].position].status;
-            this.$refs.contentBox.$refs.carDetails[0].$refs.infoPanel[this.features[newNote.name].infoPanel].$refs.note[this.features[newNote.name].position].updateStatus(newStatus);
-
-            // update features with 'km' unit
-            let featuresList = Object.keys(this.features);
-            // console.log(`Features: ${featuresList}`)
-
-            featuresList.forEach(feature => {
-              // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
-
-              if (this.features[feature].unit === 'km') {
-
-                this.checkStatus(this.features[feature],this.activeCar);// note - update feature status
-                let newStatus = this.cars[this.activeCar].info[this.features[feature].infoPanel].panelData[this.features[feature].position].status;
-                this.$refs.contentBox.$refs.carDetails[0].$refs.infoPanel[this.features[feature].infoPanel].$refs.note[this.features[feature].position].updateStatus(newStatus);
-  
-              }
-            });
-
-            // check car status
-            this.setCarStatus(this.activeCar);
-          }
-          toggleSaveSuggest('on');
-
-          break
     
         case 'anc-confirm':
-    
           this.addNewCar();
-    
-          // reset form
           this.$refs.addNewCar.$refs.ancContent.resetForm();
-    
-          // hide addNewCar dialog box
-          this.$refs.addNewCar.hide();
-    
-          // hide board overlay
-          this.hideContent();
+          this.popup = undefined;
+          this.boardOverlay = false;
+          toggleNavBarBtns();
           break
             
         case 'content-dc-delCar-confirm':
@@ -269,21 +219,18 @@ export default {
           break
             
         case 'content-hideContent':
-    
-          // hide content + board overlay
-          this.hideContent();
+
+          this.currentDisplay = "Board";
+          this.setCarStatus(this.activeCar);
+          this.changeActiveCar('reset');      
+          toggleNavBarBtns();
           break
             
         case 'anc-cancel':
-    
-          // reset form
           this.$refs.addNewCar.$refs.ancContent.resetForm();
-    
-          // hide addNewCar dialog box
-          this.$refs.addNewCar.hide();
-    
-          // hide board overlay
-          this.hideContent();
+          this.popup = undefined;
+          this.boardOverlay = false;
+          toggleNavBarBtns();
           break
               
         default:
@@ -316,15 +263,9 @@ export default {
       this.cars = await database;
       this.toggleLoader();
 
-      return database
-    },
-    showNewCarDialog: function() {
-      
-      // show board overlay
-      this.$refs.boardOverlay.turnOn();
-
-      // show dialog box
-      this.$refs.addNewCar.show();
+      return new Promise(resolve => {
+        resolve();
+      })
     },
     addNewCar: function() {
       // console.log('add new car');
@@ -379,20 +320,77 @@ export default {
       
             // set photo
             this.cars[newCarId].photo = carPhoto;
-      
-            // set new cars status to unknown
-            setTimeout(() => {
-      
-              this.$refs.board.$refs.card[newCarId].$refs.cardStatus.updateStatus('unknown');
-            },100);
           }).then(() => {
             saveData(this.user, this.cars);
-            // getAllPhotos(this.user).then(photos => {
-            //   const updatedPhotos = updateAllPhotos(photos, 'add', carCode);
-            //   saveAllPhotos(this.user, updatedPhotos);
-            // });
           });
         }
+    },
+    updateNote: function(note) {
+
+      // console.log(note)
+          
+      // console.log(this.features[note.name])
+      // get feature and change its value
+      this.cars[this.activeCar].info[this.features[note.name].infoPanel].panelData[this.features[note.name].position].value = note.value;
+
+      // set last modified value if feature is mileage
+      if(note.name === 'mileAge') {
+        this.cars[this.activeCar].info[this.features[note.name].infoPanel].panelData[this.features[note.name].position].lastUpdate = this.getCurrentDate();
+      }
+
+      if(this.features[note.name].toBeVerified) {
+
+        // check feature status
+        let newStatus = this.checkStatus(this.features[note.name],this.activeCar);
+  
+        // note - update feature status
+        updateStatusDisplay(`#note-${note.name}`, `${newStatus}`);
+
+        // update features with 'km' unit
+        let featuresList = Object.keys(this.features);
+        // console.log(`Features: ${featuresList}`)
+
+        featuresList.forEach(feature => {
+          // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
+
+          if (note.name === 'mileAge' && this.features[feature].unit === 'km') {
+
+            let newStatus = this.checkStatus(this.features[feature],this.activeCar);
+            updateStatusDisplay(`#note-${this.features[feature].name}`, `${newStatus}`);
+  
+          }
+        });
+      }
+      toggleSaveSuggest('on');
+
+    },
+    deleteCar: function (deletedCar) {
+      
+      // hide content
+      this.currentDisplay = "Board";
+      this.changeActiveCar('reset',null);
+      toggleNavBarBtns();
+    
+      // let deletedCar = car;
+      let delCarCode = this.cars[deletedCar].carCode;
+    
+      // delete active car
+      this.cars.splice(deletedCar,1);
+    
+      // adjust IDs
+      this.cars.forEach(car => {
+    
+        if (car.id > deletedCar) {
+          this.adjustCarId(car.id);
+        }          
+      });      
+
+      // delete photo
+      deleteCarPhoto(this.user, delCarCode);
+
+      // save changes
+      saveData(this.user, this.cars);
+
     },
     adjustCarId: function(carId) {
       let currentCarId = this.cars[carId - 1].id;
@@ -452,17 +450,17 @@ export default {
         carStatus = 'ok';
 
       }
-      // console.log(carStatus)
+      // console.log(`carID: ${carId}, carStatus: ${carStatus}`)
       this.cars[carId].status = carStatus;
       // console.log(this.cars[carId].status)
-      this.$refs.board.$refs.card[carId].$refs.cardStatus.updateStatus(carStatus);
+      setTimeout(() => {
+        this.$refs.board.$refs.card[carId].$refs.cardStatus.updateStatus(carStatus);
+      },1000)
     },
     setFeatureStatus: function(carId,status,feature) {
       // console.log(`feature: ${feature}, status: ${status}`)
       this.cars[carId].info[this.features[feature].infoPanel].panelData[this.features[feature].position].status = status;
 
-      // update card status bar in cardStatus component
-      // this.$refs.board.$refs.card[0].$refs.cardStatus.updateStatus(status);
     },
     checkStatus: function(feature,carId) {
       // console.log(`feature: ${feature.name}, unit: ${feature.unit}, alert: ${feature.alert}, warning: ${feature.warning}`);
@@ -570,15 +568,20 @@ export default {
         default:
           console.log('DB ERROR')
       }
+      // console.log(`${feature}, ${value}`)
+      if(value === 'n/a') {
+        status = 'unknown'
+      }
       // console.log(`status: ${status}`)
       this.setFeatureStatus(carId,status,feature.name);
+      return status;
     },
     changeActiveCar: function(action,id) {
       // console.log(`Active car is: ${this.activeCar}`)
 
       if(action === 'set') {
         this.activeCar = `${id}`;
-      } else if (action === 'delete') {
+      } else if (action === 'reset') {
         this.activeCar = [];
       } else {
         console.log('An error occured when trying to show / hide content.')
@@ -586,27 +589,16 @@ export default {
     },
     showCar: function(id) {
 
-      // console.log(this.cars[id].id)
+      this.currentDisplay = "CarDetails";
 
-      if(document.querySelector('#content').classList.contains('active') === false) {
-
-        this.$refs.contentBox.show(id);
-
-        this.$refs.boardOverlay.turnOn();
-
-        this.changeActiveCar('set',id);
-      }
+      this.changeActiveCar('set',id);
+      
+      toggleNavBarBtns();
     },
     hideContent: function() {
-      
-      // hide content
-      this.$refs.contentBox.hide();
-
-      // reset active car
-      this.changeActiveCar('delete',null);
-
-      // hide board overlay
-      this.$refs.boardOverlay.turnOff();
+      this.currentDisplay = "Board";
+      this.setCarStatus(this.activeCar);
+      this.changeActiveCar('reset',null);
     },
     getCarsData: function() {
       console.log(this.cars)
@@ -629,5 +621,11 @@ export default {
     width: 98vw;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .3s ease;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>

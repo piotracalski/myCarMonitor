@@ -24,9 +24,9 @@ export default {
         getFormData: function() {
             return document.getElementById('newValue').value;
         },
-        resetForm: function() {
-            document.getElementById('newValue').value = '';
-        }
+        // resetForm: function() {
+        //     document.getElementById('newValue').value = '';
+        // }
     }
 }
 </script>
