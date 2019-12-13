@@ -4,18 +4,7 @@
 
 <script>
 export default {
-    name: 'ContentOverlay',
-    methods: {
-        turnOn: function() {
-            document.querySelector('#contentOverlay').style.visibility = 'visible';
-            document.querySelector('body').style.overflowY = 'hidden';
-        },
-        turnOff: function() {
-            document.querySelector('#contentOverlay').style.visibility = 'hidden';
-            document.querySelector('body').style.overflowY = 'scroll';
-        }
-
-    }
+    name: 'ContentOverlay'
 }
 </script>
 

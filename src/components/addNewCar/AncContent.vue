@@ -90,9 +90,7 @@ export default {
             }
             if(file){
                 reader.readAsDataURL(this.selectedFile);
-                }else{
-                }
-            
+                }            
         }
     }
 }

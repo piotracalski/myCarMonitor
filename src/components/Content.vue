@@ -16,6 +16,9 @@ import CarDetails from './content/CarDetails.vue'
 import ContentOverlay from './content/ContentOverlay.vue'
 import EditNote from './content/editNote/EditNote.vue'
 import DeleteConfirmation from './content/delConf/DelConf.vue'
+import {
+    
+} from '../helpers'
 
 export default {
     name: 'Content',
@@ -45,16 +48,25 @@ export default {
         emitButtonClick: function(btn) {
             switch (btn) {
                 case 'deleteCar':
-                    this.deleteCar();
+                    this.toggleOverlay();
+                    this.popup = 'deleteConfirmation';
                     break
                 case 'dc-delCar-cancel':
-                    this.$refs.contentOverlay.turnOff();
-                    this.$refs.delConf.hide();
+                    this.toggleOverlay();
+                    this.popup = undefined;
                     break
                 case 'dc-delCar-confirm':
-                    this.$refs.contentOverlay.turnOff();
-                    this.$refs.delConf.hide();
-                    this.$emit('btnClick',`content-${btn}`);
+                    this.toggleOverlay();
+                    this.popup = undefined;
+                    this.$emit('deleteCar', this.activeCar);
+                    break
+                case 'en-cancel':
+                    this.hideEditNote();
+                    break
+                case 'en-confirm':
+                    let newNote = this.$refs.editNote.getNewValue();
+                    this.hideEditNote();
+                    this.$emit('updateNote',newNote);
                     break
                 default:
                     this.$emit('btnClick',`content-${btn}`);
@@ -69,14 +81,6 @@ export default {
             this.toggleOverlay();
             this.popup = undefined;
             this.note = undefined;
-        },
-        deleteCar: function() {
-
-            // turn on content overlay
-            this.$refs.contentOverlay.turnOn();
-
-            // show confirmation box
-            this.$refs.delConf.show();
         }
     }
 }
