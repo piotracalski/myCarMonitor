@@ -1,8 +1,11 @@
 <template>
     <div class="carDetails">
-        <BigPhoto />
+        <BigPhoto v-on:btnClick="emitButtonClick" />
         <div class="carData">
-            <HeaderPanel :carMake="this.cars[this.activeCar].info[0].panelData[0].value" :carModel="this.cars[this.activeCar].info[0].panelData[1].value" v-on:btnClick="emitButtonClick"/>
+            <HeaderPanel
+                :carMake="this.cars[this.activeCar].info[0].panelData[0].value" :carModel="this.cars[this.activeCar].info[0].panelData[1].value" 
+                v-on:btnClick="emitButtonClick"
+            />
             <div class="carDataContent">
                 <div :key="panel.panelTitle" v-for="panel in this.cars[this.activeCar].info">
                     <InfoPanel ref="infoPanel" :panel="panel" v-on:editNote="emitEditNote"/>

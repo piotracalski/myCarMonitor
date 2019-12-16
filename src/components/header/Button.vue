@@ -1,5 +1,5 @@
 <template>
-    <div class="button" :id="'button-'+button" @click="$emit('btnClick',button)" @mouseover="emitEvent" @mouseleave="emitEvent">
+    <div class="button" :id="'button-'+button" @click="$emit('btnClick',button)">
     </div>
 </template>
 
@@ -13,13 +13,6 @@ export default {
     props: ['button'],
     mounted() {
         document.querySelector(`#button-${this.button}`).style.backgroundImage = `url('./${this.button}.png')`
-    },
-    methods: {
-        emitEvent: function (event) {
-            if (this.button === 'editPhoto') {
-                this.$emit('editPhoto', event.type);
-            }
-        }
     }
 }
 </script>
