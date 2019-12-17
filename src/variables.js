@@ -5,7 +5,9 @@ export const dbVariables = {
 };
 
 export const storageVariables = {
-    mainFolder: 'CarPhoto'
+    mainFolder: 'CarPhoto',
+    stockImages: 'stockImages',
+    stockPhoto: 'car-stock.png'
 };
 
 export const selectors = {

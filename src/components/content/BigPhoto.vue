@@ -1,8 +1,8 @@
 <template>
     <div id="bigPhoto" @mouseover="showEditBtn" @mouseleave="hideEditBtn">
-        <div :key="button" v-for="button in buttons">
-            <Button :button="button" v-on:btnClick="$emit('editPhoto')" v-on:editPhoto="editPhoto"/>
-        </div>
+        <transition name="fade" mode="out-in">
+            <Button v-if="editBtn === true" :button="'changePhoto'" v-on:btnClick="emitButtonClick" />
+        </transition>
     </div>
 </template>
 
@@ -16,32 +16,20 @@ export default {
     },
     data() {
         return {
-            buttons: [
-                'editPhoto'
-            ]
+            editBtn: false
         }
     },
     mounted() {
     },
     methods: {
+        emitButtonClick: function(btn) {
+            this.$emit('btnClick',btn);
+        },
         showEditBtn: function () {
-            document.querySelector('#button-editPhoto').classList.add('visible');
+            this.editBtn = true;
         },
         hideEditBtn: function () {
-            document.querySelector('#button-editPhoto').classList.remove('visible');
-        },
-        editPhoto: function (event) {
-            const bigPhoto = document.querySelector('#bigPhoto');
-            switch (event) {
-                case 'mouseover':
-                    bigPhoto.style.opacity = "0.8";
-                    break
-                case 'mouseleave':
-                    bigPhoto.style.opacity = "1";
-                    break
-                default:
-                    console.log('no action defined for this event');
-            }
+            this.editBtn = false;
         }
     }
 }
@@ -59,18 +47,31 @@ export default {
         position: relative;
         transition: opacity 1s;
     }
-    #button-editPhoto {
+    #button-changePhoto {
         position: absolute;
         right: 10px;
         bottom: 10px;
-        opacity: 0;
         cursor: default;
         z-index: 10;
     }
-    #button-editPhoto:hover {
+    #button-changePhoto:hover {
         cursor: pointer;
     }
-    .visible {
-        opacity: 1 !important;
+    #bigPhotoOverlay {
+        width: 100%;
+        height: 100%;
+        background-color: #f7f7f7;
+        opacity: 0.5;
+        color: #f7f7f7;
+        font-size: 24px;
+        text-align: center;
+    }
+    #changePhoto {
+        font-family: 'Prompt', sans-serif;
+        color: #f7f7f7;
+        font-size: 24px;
+        text-align: center;
+        z-index: 10;
+        position: absolute;
     }
 </style>
