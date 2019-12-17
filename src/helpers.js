@@ -43,6 +43,7 @@ const removeFromArray = (arr, val) => {
     // uploadCarPhoto
     // getCarPhoto
     // setPhoto
+    // getStockCarImage
     // deleteCarPhoto
     // getAllPhotos - unused
     // updateAllPhotos - unused
@@ -73,6 +74,21 @@ export const setPhoto = (user, car, element) => {
         document.querySelector(element).style.backgroundImage = `url(${url})`;
     });
 };
+
+const getStockCarImage = () => {
+    return new Promise(resolve => {
+        const storageRef = storage.ref(`${storageVariables.mainFolder}/${storageVariables.stockImages}/${storageVariables.stockPhoto}`);
+        storageRef.getDownloadURL().then(url => {
+            resolve(url)
+        });
+    });
+};
+
+export const setStockCarImage = element => {
+    getStockCarImage().then(url => {
+        document.querySelector(element).style.backgroundImage = `url(${url})`;
+    });
+}
 
 export const deleteCarPhoto = (user, carCode) => {
     return new Promise(resolve => {

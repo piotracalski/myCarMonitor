@@ -17,7 +17,8 @@
 <script>
 import WideBtn from '../../buttons/WideBtn'
 import {
-    setPhoto
+    setPhoto,
+    setStockCarImage
 } from '../../../helpers.js'
 
 export default {
@@ -38,17 +39,44 @@ export default {
     },
     mounted() {
         setPhoto(this.user, this.car, '#cpContent-img');
+        if (this.car.photo) {
+            this.selectedFile = this.car.carCode;
+            this.toggleWideBtnDisabled('reset');
+        } else {
+            this.toggleWideBtnDisabled('deleteFile');
+            this.toggleWideBtnDisabled('reset');
+        }
+        console.log(this.selectedFile)
     },
     methods: {
         handleWideBtnClick: function (wideBtn) {
             console.log(wideBtn);
+            switch (wideBtn) {
+                case 'chooseFile':
+                    break
+                case 'deleteFile':
+                    this.selectedFile = undefined;
+                    setStockCarImage('#cpContent-img');
+                    this.toggleWideBtnDisabled('deleteFile');
+                    this.toggleWideBtnDisabled('reset');
+                    break
+                case 'reset':
+                    if (this.car.photo) {
+                        this.selectedFile = this.car.carCode;
+                        setPhoto(this.user, this.car, '#cpContent-img');
+                        this.toggleWideBtnDisabled('deleteFile');
+                        this.toggleWideBtnDisabled('reset');
+                    }
+                    break
+                default:
+                    console.log('No action defined for this button')
+            }
         },
-        getFormData: function() {
-            return [
-                document.getElementById('cpContent-input-carMake').value,
-                document.getElementById('cpContent-input-carModel').value,
-                this.selectedFile
-            ]
+        toggleWideBtnDisabled: function (btn) {
+            document.getElementById(`cpContent-wideBtn-${btn}`).classList.toggle('wideBtnDisabled');
+        },
+        getNewPhoto: function() {
+            return this.selectedFile;
         },
         triggerClick: function() {
             

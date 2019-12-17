@@ -1,10 +1,8 @@
 <template>
   <button class="wideBtn" :id="parent+'-wideBtn-'+wideBtn.name" @click="emitWideBtnClick">
-      <span class="wideBtn-lbl">
-          {{
-              wideBtn.lbl
-          }}
-      </span>
+        {{
+            wideBtn.lbl
+        }}
     </button>
 </template>
 
@@ -14,7 +12,8 @@ export default {
     props: ['wideBtn', 'parent'],
     mounted() {
         if (this.wideBtn.name === 'reset') {
-            document.getElementById(`${this.parent}-wideBtn-${this.wideBtn.name}`).classList.add('wideBtnDisabled')
+            // document.getElementById(`${this.parent}-wideBtn-${this.wideBtn.name}`).classList.add('wideBtnDisabled');
+            // this.toggleDisabled();
         }
     },
     methods:{
@@ -23,6 +22,9 @@ export default {
             if (!wideBtnClassList.includes('wideBtnDisabled')) {
                 this.$emit('wideBtnClick',this.wideBtn.name);
             }
+        },
+        toggleDisabled: function (btn) {
+            document.getElementById(`${this.parent}-wideBtn-${this.wideBtn.name}`).classList.toggle('wideBtnDisabled');
         }
     }
 }
@@ -35,6 +37,11 @@ export default {
         background-color:#5d5974;
         border:none;
         box-shadow: 0 0 10px 0 #000;
+        font-family: 'Prompt', sans-serif;
+        font-size: 16px;
+        color: #f7f7f7;
+        line-height: 16px;
+        text-indent: 0px;
     }
     .wideBtn:hover{
         cursor: pointer;
@@ -48,11 +55,4 @@ export default {
         box-shadow: 0 0 10px 0 #000;
         cursor: default;
     }
-    .wideBtn-lbl {
-        font-family: 'Prompt', sans-serif;
-        font-size: 16px;
-        color: #f7f7f7;
-        line-height: 16px;
-        text-indent: 0px;
-        }
 </style>
