@@ -297,33 +297,29 @@ export default {
         carPhoto = false;
       }
 
-      // validate that carMake and carModel are not empty
-      // if not add new car object
-      // if (formData[0] !== '' && formData[1] !== '') {
+      function setNewCar () {
+        console.log(newCarId, carCode)
+        console.log(this.cars)
+      }
 
-        if(carPhoto) {
-
-          // upload photo to database
-          uploadCarPhoto(this.user, carCode, formData[2]).then(() => {
-
-            // create new car object
-            let newCar = new Car(newCarId, carCode);
-      
-            // push newCar to cars data object
-            this.cars.push(newCar);
-      
-            // set carMake
-            this.cars[newCarId].info[0].panelData[0].value = formData[0];
-      
-            // set carModel
-            this.cars[newCarId].info[0].panelData[1].value = formData[1];
-      
-            // set photo
-            this.cars[newCarId].photo = carPhoto;
-          }).then(() => {
-            saveData(this.user, this.cars);
-          });
-        }
+        uploadCarPhoto(this.user, carCode, formData[2]).then(() => {
+          // create new car object
+          let newCar = new Car(newCarId, carCode);
+        
+          // push newCar to cars data object
+          this.cars.push(newCar);
+        
+          // set carMake
+          this.cars[newCarId].info[0].panelData[0].value = formData[0];
+        
+          // set carModel
+          this.cars[newCarId].info[0].panelData[1].value = formData[1];
+        
+          // set photo
+          this.cars[newCarId].photo = carPhoto;
+        }).then(() => {
+          saveData(this.user, this.cars);
+        });
     },
     updateNote: function(note) {
 
@@ -365,7 +361,7 @@ export default {
 
     },
     deleteCar: function (deletedCar) {
-      
+
       // hide content
       this.currentDisplay = "Board";
       this.changeActiveCar('reset',null);
@@ -373,6 +369,7 @@ export default {
     
       // let deletedCar = car;
       let delCarCode = this.cars[deletedCar].carCode;
+      let customPhoto = this.cars[deletedCar].photo;
     
       // delete active car
       this.cars.splice(deletedCar,1);
@@ -386,7 +383,9 @@ export default {
       });      
 
       // delete photo
-      deleteCarPhoto(this.user, delCarCode);
+      if (customPhoto) {
+        deleteCarPhoto(this.user, delCarCode);
+      }
 
       // save changes
       saveData(this.user, this.cars);

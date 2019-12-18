@@ -50,14 +50,21 @@ const removeFromArray = (arr, val) => {
     // deleteUnusedPhotos - unused
 
 export const uploadCarPhoto = async (user, carCode, photo) => {
-    return new Promise(resolve => {
-        const storageRef = storage.ref().child(`${storageVariables.mainFolder}/${user}/${carCode}`);
-        const file = photo; 
-        storageRef.put(file).then(() => {
-          console.log(`File ${carCode} uploaded!`);
-          resolve();
+    if (photo) {
+        return new Promise(resolve => {
+            const storageRef = storage.ref().child(`${storageVariables.mainFolder}/${user}/${carCode}`);
+            const file = photo; 
+            storageRef.put(file).then(() => {
+              console.log(`File ${carCode} uploaded!`);
+              resolve();
+            });
         });
-    })
+    } else {
+        return new Promise(resolve => {
+            console.log('No photo loaded. Car image set to stock');
+            resolve();
+        });
+    }
 };
 
 export const getCarPhoto = (user, car) => {
@@ -70,9 +77,15 @@ export const getCarPhoto = (user, car) => {
 };
 
 export const setPhoto = (user, car, element) => {
-    getCarPhoto(user, car).then(url => {
-        document.querySelector(element).style.backgroundImage = `url(${url})`;
-    });
+    if (car.photo) {
+        getCarPhoto(user, car).then(url => {
+            document.querySelector(element).style.backgroundImage = `url(${url})`;
+        });
+    } else {
+        getStockCarImage().then(url => {
+            document.querySelector(element).style.backgroundImage = `url(${url})`;
+        });
+    }
 };
 
 const getStockCarImage = () => {
