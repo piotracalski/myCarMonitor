@@ -1,6 +1,6 @@
 # mycarmonitor
 
-Current version is 0.7.4 <br>
+Current version is 0.7.5 <br>
 v.1.0.0 TODO's:
 - login / logout
 - photo saving issue - DONE
@@ -10,7 +10,8 @@ v.1.0.0 TODO's:
 - photo edit
 - UX improvment
 - delete car icon change - DONE
-- stock car img bug
+- stock car img bug - DONE
+- updateStatus after timeout bug
 
 ## Project setup
 ```

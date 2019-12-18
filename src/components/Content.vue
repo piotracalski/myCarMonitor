@@ -54,6 +54,7 @@ export default {
         }
     },
     mounted() {
+        this.setBigPhotoDisplay();
     },
     methods: {
         toggleOverlay: function() {
@@ -106,6 +107,13 @@ export default {
             this.toggleOverlay();
             this.popup = undefined;
             this.note = undefined;
+        },
+        setBigPhotoDisplay: function() {
+            if (this.cars[this.activeCar].photo) {
+                document.getElementById('bigPhoto').style.backgroundSize = "cover";
+            } else {
+                document.getElementById('bigPhoto').style.backgroundSize = "contain";
+            }
         }
     }
 }

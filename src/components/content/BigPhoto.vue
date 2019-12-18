@@ -39,7 +39,7 @@ export default {
     #bigPhoto {
         width: 100%;
         height: 100%;
-        background-size: cover;
+        /* background-size: contain; */
         background-position: center;
         background-repeat: no-repeat;
         box-shadow: 0px 0px 20px 0px #000;
