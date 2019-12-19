@@ -17,6 +17,7 @@
     </transition>
     <transition name="fade" mode="out-in">
       <AddNewCar ref="addNewCar" v-if="popup === 'AddNewCar'" v-on:btnClick="contentButtons"/>
+      <Login ref="login" v-if="popup === 'Login'" v-on:btnClick="contentButtons"/>
     </transition>
     <transition name="fade" mode="out-in">
       <BoardOverlay ref="boardOverlay" v-if="boardOverlay === true" />
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import Login from './components/Login.vue'
 import Header from './components/Header.vue'
 import Board from './components/Board.vue'
 import Content from './components/Content.vue'
@@ -54,6 +56,7 @@ import {
 export default {
   name: 'app',
   components: {
+    Login,
     Header,
     Board,
     Content,
@@ -63,8 +66,9 @@ export default {
   },
   data() {
     return {
-      currentDisplay: 'Board',
-      popup: undefined,
+      loggedIn: false,
+      currentDisplay: undefined,
+      popup: 'Login',
       boardOverlay: false,
       user: 'piotracalski',
       activeCar: [],
