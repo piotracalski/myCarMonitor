@@ -357,8 +357,7 @@ export default {
           }
         });
       }
-      toggleSaveSuggest('on');
-
+      saveData(this.user, this.cars);
     },
     deleteCar: function (deletedCar) {
 

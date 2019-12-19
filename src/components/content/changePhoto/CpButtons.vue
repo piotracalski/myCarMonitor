@@ -27,7 +27,6 @@ export default {
 
 <style>
     #cpButtons {
-        /* background-color:#fff; */
         height: 70px;
         display: flex;
         flex-direction:row-reverse;

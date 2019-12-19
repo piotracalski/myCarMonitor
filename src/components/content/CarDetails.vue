@@ -48,7 +48,6 @@ export default {
     .carDetails {
         width: calc(100% - 40px);
         height: calc(100% - 110px);
-        /* background-color: #f7f7f7; */
         margin: 90px 20px 20px 20px;
         display: grid;
         grid-template-columns: 3fr 5fr;
@@ -58,7 +57,6 @@ export default {
     .carData {
         width: 100%;
         height: 100%;
-        /* background-color: green; */
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 4fr; 

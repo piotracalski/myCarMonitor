@@ -2,12 +2,7 @@
   <div id="cpContent">
       <div id="cpContent-title">Change photo</div>
       <div id="cpContent-img"></div>
-      <input id="cpContent-fileValue" style="display:none" type="file" ref="fileInput" @change="fileSelected">
-      <!-- <button class="cpContent-button" id="cpContent-button-chooseImage" @click="triggerClick">
-        <span class="cpContent-lbl">Choose image from file</span>
-      </button>
-      <button class="cpContent-button disabled" id="cpContent-button-resetImage" @click="resetImage"><span class="cpContent-lbl">Reset Image</span></button> -->
-      
+      <input id="cpContent-fileValue" style="display:none" type="file" ref="fileInput" @change="fileSelected">      
     <div :key="wideBtn.name" v-for="wideBtn in wideBtns">
         <WideBtn :wideBtn="wideBtn" :parent="'cpContent'" v-on:wideBtnClick="handleWideBtnClick"/>
     </div>
@@ -34,7 +29,7 @@ export default {
                 {name: 'deleteFile', lbl: 'Delete current photo'},
                 {name: 'reset', lbl: 'Reset'},
             ],
-            selectedFile: null
+            selectedFile: undefined
         }
     },
     mounted() {
@@ -46,13 +41,12 @@ export default {
             this.toggleWideBtnDisabled('deleteFile');
             this.toggleWideBtnDisabled('reset');
         }
-        console.log(this.selectedFile)
     },
     methods: {
         handleWideBtnClick: function (wideBtn) {
-            console.log(wideBtn);
             switch (wideBtn) {
                 case 'chooseFile':
+                    this.triggerClick();
                     break
                 case 'deleteFile':
                     this.selectedFile = undefined;
@@ -61,11 +55,24 @@ export default {
                     this.toggleWideBtnDisabled('reset');
                     break
                 case 'reset':
-                    if (this.car.photo) {
+                    if (this.car.photo && this.selectedFile === undefined) {
                         this.selectedFile = this.car.carCode;
                         setPhoto(this.user, this.car, '#cpContent-img');
                         this.toggleWideBtnDisabled('deleteFile');
                         this.toggleWideBtnDisabled('reset');
+                    } else if (this.car.photo && this.selectedFile !== undefined) {
+                        this.selectedFile = this.car.carCode;
+                        setPhoto(this.user, this.car, '#cpContent-img');
+                        this.toggleWideBtnDisabled('deleteFile');
+                        this.toggleWideBtnDisabled('chooseFile');
+                        this.toggleWideBtnDisabled('reset');
+                        document.getElementById("cpContent-fileValue").value = '';
+                    } else if (!this.car.photo) {
+                        this.selectedFile = undefined;
+                        this.toggleWideBtnDisabled('chooseFile');
+                        this.toggleWideBtnDisabled('reset');
+                        document.getElementById("cpContent-fileValue").value = '';
+                        setStockCarImage('#cpContent-img');
                     }
                     break
                 default:
@@ -80,57 +87,22 @@ export default {
         },
         triggerClick: function() {
             
-            let btnClassList = Array.from(document.getElementById('cpContent-button-chooseImage').classList);
+            let btnClassList = Array.from(document.getElementById('cpContent-wideBtn-chooseFile').classList);
 
-            if (!btnClassList.includes('disabled')) {
+            if (!btnClassList.includes('wideBtnDisabled')) {
                 this.$refs.fileInput.click();
             }
         },
-        resetForm: function() {
-            
-            // clear carMake input
-            document.getElementById('cpContent-input-carMake').value = '';
-
-            // clear carModel input
-            document.getElementById('cpContent-input-carModel').value = '';
-
-            // reset image
-            this.resetImage();
-        },
-        resetImage: function() {
-            
-            let btnClassList = Array.from(document.getElementById('cpContent-button-resetImage').classList);
-
-            if (!btnClassList.includes('disabled')) {
-
-                // set selected file to null
-                this.selectedFile = null;
-    
-                // set car img to stock
-                document.getElementById('cpContent-img').style.backgroundImage =  `url('car-stock.png')`;
-    
-                // switch buttons
-                this.switchButtons();
-    
-                // reset input value cpContent-fileValue
-                document.getElementById("cpContent-fileValue").value = '';
-            }
-        },
-        switchButtons: function() {
-
-                document.getElementById('cpContent-button-chooseImage').classList.toggle('disabled');
-                document.getElementById('cpContent-button-resetImage').classList.toggle('disabled');        
-        },
         fileSelected: function (event) {
-
-            // console.log(event);
-            // switch button to reset
-            this.switchButtons();
-    
-            // store file in code
+            this.toggleWideBtnDisabled('chooseFile');
+            if (this.selectedFile === this.car.carCode) {
+                this.toggleWideBtnDisabled('deleteFile');
+                this.toggleWideBtnDisabled('reset');
+            } else {
+                this.toggleWideBtnDisabled('reset');
+            }
             this.selectedFile = event.target.files[0];
     
-            // change cpContent-img to chosen file
             let file = document.getElementById("cpContent-fileValue").files[0];
             let reader = new FileReader();
             reader.onloadend = function(){
@@ -138,7 +110,7 @@ export default {
             }
             if(file){
                 reader.readAsDataURL(this.selectedFile);
-                }            
+            }
         }
     }
 }

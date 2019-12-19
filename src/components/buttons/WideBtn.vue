@@ -10,12 +10,6 @@
 export default {
     name: 'WideBtn',
     props: ['wideBtn', 'parent'],
-    mounted() {
-        if (this.wideBtn.name === 'reset') {
-            // document.getElementById(`${this.parent}-wideBtn-${this.wideBtn.name}`).classList.add('wideBtnDisabled');
-            // this.toggleDisabled();
-        }
-    },
     methods:{
         emitWideBtnClick: function () {
             let wideBtnClassList = Array.from(document.getElementById(`${this.parent}-wideBtn-${this.wideBtn.name}`).classList);
