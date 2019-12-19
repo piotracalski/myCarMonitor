@@ -33,7 +33,11 @@ import EditNote from './content/editNote/EditNote.vue'
 import DeleteConfirmation from './content/delConf/DelConf.vue'
 import ChangePhoto from './content/changePhoto/ChangePhoto.vue'
 import {
-    
+    setStockCarImage,
+    deleteCarPhoto,
+    uploadCarPhoto,
+    setPhoto,
+    saveData
 } from '../helpers'
 
 export default {
@@ -94,6 +98,12 @@ export default {
                     this.toggleOverlay();
                     this.popup = undefined;
                     break
+                case 'cp-confirm':
+                    const newPhoto = this.$refs.changePhoto.$refs.cpContent.getNewPhoto();
+                    this.switchPhoto(newPhoto);
+                    this.toggleOverlay();
+                    this.popup = undefined;
+                    break
                 default:
                     this.$emit('btnClick',`content-${btn}`);
             }
@@ -114,6 +124,31 @@ export default {
             } else {
                 document.getElementById('bigPhoto').style.backgroundSize = "contain";
             }
+        },
+        switchPhoto: function (photo) {
+            if (!photo && this.cars[this.activeCar].photo) {
+
+                // there is a photo and it has to be deleted and replaced by stock photo
+                this.cars[this.activeCar].photo = false;
+
+                document.getElementById('bigPhoto').style.backgroundImage = 'none';
+                this.setBigPhotoDisplay();
+                setStockCarImage('#bigPhoto');
+
+                deleteCarPhoto(this.user, this.cars[this.activeCar].carCode);
+            } else if (photo.name) {
+                
+                // a new photo was chosen
+                this.cars[this.activeCar].photo = true;
+
+                uploadCarPhoto(this.user, this.cars[this.activeCar].carCode, photo).then(() => {
+
+                    document.getElementById('bigPhoto').style.backgroundImage = 'none';
+                    this.setBigPhotoDisplay();
+                    setPhoto(this.user, this.cars[this.activeCar], '#bigPhoto');
+                });
+            }
+            saveData(this.user, this.cars);
         }
     }
 }
