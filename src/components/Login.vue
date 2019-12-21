@@ -2,9 +2,9 @@
     <div id="login-box">
         <div id="login-box-title">Please, login:</div>
         <div class="login-box-lbl">Enter email:</div>
-        <div><input name="email" type="text"></div>
+        <div><input name="email" type="text" v-model="email"></div>
         <div class="login-box-lbl">Enter password:</div>
-        <div><input name="password" type="password"></div>
+        <div><input name="password" type="password" v-model="password"></div>
         <div :key="wideBtn.name" v-for="wideBtn in wideBtns">
             <WideBtn :wideBtn="wideBtn" :parent="'login'" v-on:wideBtnClick="handleWideBtnClick"/>
         </div>
@@ -13,6 +13,9 @@
 
 <script>
 import WideBtn from './buttons/WideBtn'
+import {
+    toggleWideBtnDisabled
+} from '../display'
 
 export default {
     name: 'Login',
@@ -21,6 +24,8 @@ export default {
     },
     data() {
         return {
+            email: '',
+            password: '',
             wideBtns: [
                 {name: 'login', lbl: 'Login'},
                 {name: 'reset', lbl: 'Reset'},
@@ -28,11 +33,30 @@ export default {
         }
     },
     methods: {
-        emitButtonClick: function(btn) {
-            this.$emit('btnClick',btn);
+        login: function() {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(this.email, this.password)
+                .then(user => {
+                    console.log(`logged in as ${user.user.email}`);
+                    this.$emit('succesfulLogin', user)
+                }, err => {
+                    alert(err.message);
+                }
+            );
         },
-        handleWideBtnClick: function () {
-
+        handleWideBtnClick: function (wideBtn) {
+            switch (wideBtn) {
+                case 'login':
+                    this.login();
+                    break
+                case 'reset':
+                    document.querySelector('input[name="email"]').value = '';
+                    document.querySelector('input[name="password"]').value = '';
+                    break
+                default:
+                    console.log('No action defined for this button');
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-        <img src="loader.png" id="header-loader" class="loader01 loading" height="70px">
+        <img src="loader.png" id="header-loader" class="loader01" height="70px">
   </div>
 </template>
 
