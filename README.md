@@ -1,8 +1,8 @@
 # mycarmonitor
 
-Current version is 0.7.6 <br>
+Current version is 0.7.7 <br>
 v.1.0.0 TODO's:
-- login / logout
+- login / logout - DONE
 - photo saving issue - DONE
 - user control panel
 - save suggest after any edit action - DONE
@@ -12,6 +12,9 @@ v.1.0.0 TODO's:
 - delete car icon change - DONE
 - stock car img bug - DONE
 - updateStatus after timeout bug
+- no login after refresh if user was logged in issue
+- refactor - no chaining
+- refactor - add vue router
 
 ## Project setup
 ```
