@@ -11,7 +11,7 @@ export const toggleNavBarBtns = () => {
   Array.from(document.querySelectorAll(selectors.navBarBtn)).forEach(btn => {
       btn.classList.toggle(selectors.inactive);
   });
-}
+};
 
 export const updateStatusDisplay = function(element, status) {
 	// console.log(`
@@ -34,4 +34,8 @@ export const updateStatusDisplay = function(element, status) {
 			default:
 					document.querySelector(element).style.color = colors.standardTxt;
 	}
-}
+};
+
+export const toggleWideBtnDisabled = (parent, btn) => {
+	document.getElementById(`${parent}-wideBtn-${btn}`).classList.toggle('wideBtnDisabled');
+};

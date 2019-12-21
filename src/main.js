@@ -20,18 +20,30 @@ firebase.initializeApp({
 const db = firebase.firestore();
 window.db = db;
 
-db.settings({
-});
-
 const storage = firebase.storage();
 window.storage = storage;
 
 Vue.config.productionTip = false
 
-const provider = new firebase.auth.GoogleAuthProvider();
-window.provider = provider; 
+let app;
+firebase.auth().onAuthStateChanged(user => {
+  if (!app) {
+    console.log('anonymous user')
+    app = new Vue({
+      render: h => h(App),
+    }).$mount('#app')
+    // app = new Vue({
+    //   el: '#app',
+    //   template: '<App/>',
+    //   components: {App}
+    // });
+  } 
+});
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+
+
+
+// new Vue({
+//   render: h => h(App),
+// }).$mount('#app')
 

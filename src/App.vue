@@ -17,6 +17,7 @@
     </transition>
     <transition name="fade" mode="out-in">
       <AddNewCar ref="addNewCar" v-if="popup === 'AddNewCar'" v-on:btnClick="contentButtons"/>
+      <Login ref="login" v-if="popup === 'Login'" v-on:succesfulLogin="succesfulLogin"/>
     </transition>
     <transition name="fade" mode="out-in">
       <BoardOverlay ref="boardOverlay" v-if="boardOverlay === true" />
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import Login from './components/Login.vue'
 import Header from './components/Header.vue'
 import Board from './components/Board.vue'
 import Content from './components/Content.vue'
@@ -54,6 +56,7 @@ import {
 export default {
   name: 'app',
   components: {
+    Login,
     Header,
     Board,
     Content,
@@ -63,8 +66,9 @@ export default {
   },
   data() {
     return {
-      currentDisplay: 'Board',
-      popup: undefined,
+      loggedIn: false,
+      currentDisplay: undefined,
+      popup: 'Login',
       boardOverlay: false,
       user: 'piotracalski',
       activeCar: [],
@@ -103,28 +107,28 @@ export default {
   created() {},
   mounted() {
     
-    this.loadData().then(() => {
+    // this.loadData().then(() => {
       
-      const featuresList = Object.keys(this.features);
-      // console.log(`Features: ${featuresList}`)
+    //   const featuresList = Object.keys(this.features);
+    //   // console.log(`Features: ${featuresList}`)
   
-      if(this.cars.length > 0) {
+    //   if(this.cars.length > 0) {
   
-        this.cars.forEach(car => {
-          // console.log(`car ID: ${car.id}`)
+    //     this.cars.forEach(car => {
+    //       // console.log(`car ID: ${car.id}`)
   
-          featuresList.forEach(feature => {
-            // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
+    //       featuresList.forEach(feature => {
+    //         // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
   
-            if (this.features[feature].toBeVerified) {
-              this.checkStatus(this.features[feature],car.id);
-            }
-          });
+    //         if (this.features[feature].toBeVerified) {
+    //           this.checkStatus(this.features[feature],car.id);
+    //         }
+    //       });
 
-          this.setCarStatus(car.id);
-        });
-      }
-    });
+    //       this.setCarStatus(car.id);
+    //     });
+    //   }
+    // });
   },
   methods: {
     headerButtons: function(btn) {
@@ -152,13 +156,16 @@ export default {
           
           case 'userProfile':  
             console.log('TODO');
-            const carCodes = getCarCodes(this.cars);
-            deleteUnusedPhotos(carCodes, this.user);
+            this.getCarsData();
             break
           
           case 'logout': 
-            console.log('TODO');
-            this.getCarsData();
+            firebase.auth().signOut().then(() => {
+              this.currentDisplay = undefined;
+              this.user = undefined;
+              this.loggedIn = false;
+              this.popup = 'Login';
+            });
             break
             
           default:
@@ -237,9 +244,39 @@ export default {
           console.log('No action defined for this button');
       }
     },
+    succesfulLogin: function (loggedInUser) {
+      this.loggedIn = true;
+      this.popup = undefined;
+      this.currentDisplay = 'Board';
+      this.user = loggedInUser.user.email;
+      this.toggleLoader();      
+    
+      this.loadData().then(() => {
+        
+        const featuresList = Object.keys(this.features);
+        // console.log(`Features: ${featuresList}`)
+    
+        if(this.cars.length > 0) {
+    
+          this.cars.forEach(car => {
+            // console.log(`car ID: ${car.id}`)
+    
+            featuresList.forEach(feature => {
+              // console.log(`feature: ${feature}, TBV: ${this.features[feature].toBeVerified}`)
+    
+              if (this.features[feature].toBeVerified) {
+                this.checkStatus(this.features[feature],car.id);
+              }
+            });
+
+            this.setCarStatus(car.id);
+          });
+        }
+      });
+    },
     loadData: async function() {
       
-      let docRef = db.collection("piotracalski").doc("cars");
+      let docRef = db.collection(`${this.user}`).doc("cars");
 
       let carsDb = [];
 
