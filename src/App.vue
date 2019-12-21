@@ -50,7 +50,8 @@ import {
   toggleSaveSuggest
   } from './helpers.js'
 import {
-  toggleNavBarBtns, updateStatusDisplay
+  toggleNavBarBtns, 
+  updateStatusDisplay
   } from './display.js'
 
 export default {
@@ -105,7 +106,8 @@ export default {
     }
   },
   created() {},
-  mounted() {
+  mounted() {      
+    toggleNavBarBtns();
     
     // this.loadData().then(() => {
       
@@ -249,7 +251,8 @@ export default {
       this.popup = undefined;
       this.currentDisplay = 'Board';
       this.user = loggedInUser.user.email;
-      this.toggleLoader();      
+      this.toggleLoader();        
+      toggleNavBarBtns();
     
       this.loadData().then(() => {
         

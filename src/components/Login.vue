@@ -8,6 +8,7 @@
         <div :key="wideBtn.name" v-for="wideBtn in wideBtns">
             <WideBtn :wideBtn="wideBtn" :parent="'login'" v-on:wideBtnClick="handleWideBtnClick"/>
         </div>
+        <a style="display:none" ref="mailto" href="mailto:dddevqa@gmail.com?subject=NewAccountRequest">Request an account</a>
     </div>
 </template>
 
@@ -28,7 +29,7 @@ export default {
             password: '',
             wideBtns: [
                 {name: 'login', lbl: 'Login'},
-                {name: 'reset', lbl: 'Reset'},
+                {name: 'requestAnAccount', lbl: 'Request an account'}
             ]
         }
     },
@@ -50,9 +51,8 @@ export default {
                 case 'login':
                     this.login();
                     break
-                case 'reset':
-                    document.querySelector('input[name="email"]').value = '';
-                    document.querySelector('input[name="password"]').value = '';
+                case 'requestAnAccount':
+                    this.$refs.mailto.click();
                     break
                 default:
                     console.log('No action defined for this button');
