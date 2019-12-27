@@ -1,4 +1,4 @@
-# mycarmonitor
+# myCarMonitor
 
 Current version is 0.7.7 <br>
 v.1.0.0 TODO's:
@@ -15,6 +15,8 @@ v.1.0.0 TODO's:
 - no login after refresh if user was logged in issue
 - refactor - no chaining
 - refactor - add vue router
+- refactor - add vuex
+- refactor - because of vuex and router this app needs all new architecture
 
 ## Project setup
 ```
