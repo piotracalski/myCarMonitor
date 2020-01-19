@@ -16,7 +16,7 @@ v.1.0.0 TODO's:
 - refactor - no chaining
 - refactor - add vue router
 - refactor - add vuex
-- refactor - because of vuex and router this app needs all new architecture
+Because of vuex, router and UI changes this app needs all new architecture so it was decided to create new project. Current version (0.7.7.) meets all requirements that were set during planning phase. Therefore this project may be considered successfuly delivered.
 
 ## Project setup
 ```
